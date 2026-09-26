@@ -1,0 +1,59 @@
+#!/bin/bash
+
+set -euo pipefail
+
+version_pattern='^(0|[1-9][0-9]{0,4})\.(0|[1-9][0-9]?)\.(0|[1-9][0-9]?)$'
+if [[ $# -ne 1 || ! $1 =~ $version_pattern ]]; then
+  printf 'Usage: ./release MAJOR.MINOR.PATCH\n' >&2
+  exit 2
+fi
+
+version=$1
+IFS=. read -r major minor patch <<<"$version"
+if ((major > 32767 || minor > 99 || patch > 99)); then
+  printf 'Version is outside the OTB font range.\n' >&2
+  exit 2
+fi
+
+root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+cd "$root"
+if [[ $(git rev-parse --show-toplevel) != "$root" ]]; then
+  printf 'Run this script from the Terplus Git repository.\n' >&2
+  exit 1
+fi
+if [[ -n $(git status --porcelain) ]]; then
+  printf 'Commit or remove local changes before release.\n' >&2
+  exit 1
+fi
+if git show-ref --verify --quiet "refs/tags/v$version"; then
+  printf 'Tag v%s already exists.\n' "$version" >&2
+  exit 1
+fi
+
+sources=(terplus-u*.bdf)
+if [[ ${#sources[@]} -ne 18 ]]; then
+  printf 'Expected 18 BDF source files.\n' >&2
+  exit 1
+fi
+
+current_version=
+for source in "${sources[@]}"; do
+  source_version=$(sed -n '/^FONT_VERSION /p' "$source")
+  if [[ ! $source_version =~ ^FONT_VERSION\ \"[0-9]+\.[0-9]+\.[0-9]+\"$ ]]; then
+    printf 'Invalid FONT_VERSION in %s.\n' "$source" >&2
+    exit 1
+  fi
+  if [[ -z $current_version ]]; then
+    current_version=$source_version
+  fi
+  if [[ $source_version != "$current_version" ]]; then
+    printf 'BDF source files have different versions.\n' >&2
+    exit 1
+  fi
+done
+
+sed -i -E "s/^FONT_VERSION \"[0-9]+\.[0-9]+\.[0-9]+\"$/FONT_VERSION \"$version\"/" "${sources[@]}"
+node build.js
+git add -- "${sources[@]}"
+git commit -m "Release $version"
+git tag -a "v$version"

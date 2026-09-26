@@ -1,0 +1,50 @@
+name: Publish fonts
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+      - name: Check tag and font version
+        run: |
+          [[ "$GITHUB_REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          version="${GITHUB_REF_NAME#v}"
+          sources=(terplus-u*.bdf)
+          [[ ${#sources[@]} -eq 18 ]]
+          for source in "${sources[@]}"; do
+            grep -qxF "FONT_VERSION \"$version\"" "$source"
+          done
+      - name: Build fonts
+        run: node build.js
+      - name: Package fonts
+        run: |
+          mkdir -p target/release/stage
+          for format in otb pcf psf; do
+            fonts=(target/terplus-*."$format")
+            [[ ${#fonts[@]} -eq 18 ]]
+            package="terplus-$GITHUB_REF_NAME-$format"
+            directory="target/release/stage/$package"
+            mkdir "$directory"
+            cp LICENSE README.md "$directory/"
+            cp "${fonts[@]}" "$directory/"
+            if [[ $format != psf ]]; then
+              cp 75-yes-terplus.conf "$directory/"
+            fi
+            tar -C target/release/stage --zstd -cf "target/release/$package.tar.zst" "$package"
+          done
+          (cd target/release && b2sum ./*.tar.zst > B2SUMS)
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create "$GITHUB_REF_NAME" target/release/*.tar.zst target/release/B2SUMS --verify-tag --notes-from-tag

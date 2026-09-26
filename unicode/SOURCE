@@ -1,0 +1,6 @@
+Version: 18.0.0
+
+Blocks.txt: https://www.unicode.org/Public/18.0.0/ucd/Blocks.txt
+DerivedName.txt: https://www.unicode.org/Public/18.0.0/ucd/extracted/DerivedName.txt
+NameAliases.txt: https://www.unicode.org/Public/18.0.0/ucd/NameAliases.txt
+LICENSE.txt: https://www.unicode.org/license.txt
