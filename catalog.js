@@ -323,7 +323,7 @@ function catalogPage(data, license, unicodeLicense) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
-<title>Terplus glyph catalog</title>
+<title>Terplus</title>
 <style>
 :root { color-scheme: light; font-family: system-ui, sans-serif; color: #000000; background: #ffffff; scrollbar-gutter: stable; }
 * { box-sizing: border-box; }
@@ -365,8 +365,10 @@ footer pre { white-space: pre-wrap; overflow-wrap: anywhere; }
 <body>
 <svg width="0" height="0" aria-hidden="true" style="position:absolute"><defs><filter id="xterm-green" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 0  0 -0.8039215686 0 0 0.8039215686  0 0 0 0 0  0 0 0 1 0"/></filter></defs></svg>
 <header>
-<h1>Terplus glyph catalog</h1>
-<p>All glyphs from the 18 BDF files. Select a size and weight to see its saved bitmaps. Terminus labels mark original glyphs. Terplus labels mark added glyphs.</p>
+<h1>Terplus</h1>
+<p>Terplus is a bitmap font based on Terminus Font.</p>
+<p><a href="https://github.com/kotarac/terplus">GitHub repository</a> · <a href="https://github.com/kotarac/terplus/releases">Releases</a></p>
+<p>This catalog shows glyphs from all 18 BDF files. Select a size and weight to see the saved bitmaps. Terminus labels mark original glyphs. Terplus labels mark added glyphs.</p>
 </header>
 <div class="controls" role="region" aria-label="Filters">
 <label>Font<select id="font">${fontOptions}</select></label>
