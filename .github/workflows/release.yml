@@ -1,4 +1,4 @@
-name: Publish fonts
+name: release
 
 on:
   push:
@@ -47,4 +47,4 @@ jobs:
       - name: Publish release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create "$GITHUB_REF_NAME" target/release/*.tar.zst target/release/B2SUMS --verify-tag --notes-from-tag
+        run: gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" target/release/*.tar.zst target/release/B2SUMS --verify-tag --notes-from-tag

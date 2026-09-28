@@ -1,4 +1,4 @@
-name: Publish catalog
+name: catalog
 
 on:
   push:
