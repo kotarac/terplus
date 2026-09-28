@@ -333,7 +333,9 @@ header p { max-width: 78ch; line-height: 1.6; }
 .controls { display: flex; flex-wrap: wrap; align-items: end; gap: 16px; padding: 20px 0; border-block: 1px solid #000; }
 .display { border-top: 0; }
 label { display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; max-width: 100%; }
-select, input, button { font: inherit; color: #000; background: #fff; border: 1px solid #000; border-radius: 4px; padding: 9px; min-height: 40px; }
+select, input, button { font: inherit; color: #000; background: #fff; border: 1px solid #000; border-radius: 4px; padding: 9px; height: 40px; }
+select { appearance: none; padding-inline: 12px 36px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 12px 8px; }
+@media (forced-colors: active) { select { appearance: auto; background-image: none; } }
 #range { width: 360px; max-width: 100%; }
 .search { flex: 1 1 280px; }
 button { cursor: pointer; }
