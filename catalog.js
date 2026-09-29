@@ -380,12 +380,12 @@ footer pre { white-space: pre-wrap; overflow-wrap: anywhere; }
 <button id="reset" type="button">Clear filters</button>
 </div>
 <section class="controls display" aria-label="Display controls">
-<label>Zoom<select id="zoom"><option value="1" selected>1x</option><option value="2">2x</option><option value="4">4x</option><option value="6">6x</option><option value="8">8x</option></select></label>
+<label>Zoom<select id="zoom"><option value="1">1x</option><option value="2" selected>2x</option><option value="4">4x</option><option value="6">6x</option><option value="8">8x</option></select></label>
 <label>Glyph colors<select id="invert"><option value="1" selected>White glyphs on black</option><option value="0">Black glyphs on white</option><option value="2">Green glyphs on black</option></select></label>
 </section>
 <p id="search-help">Search by Unicode name, alias, block, or BDF name. Code point ranges use hexadecimal numbers. Private-use glyphs keep their BDF names.</p>
 <p id="status" role="status" aria-live="polite">${summary}</p>
-<main id="grid" aria-label="Glyphs" data-font="${defaultFont.id}" data-zoom="1" data-colors="1" data-visible="${data.glyphs.length}" data-terminus="${original}" data-terplus="${added}">${cards}</main>
+<main id="grid" aria-label="Glyphs" data-font="${defaultFont.id}" data-zoom="2" data-colors="1" data-visible="${data.glyphs.length}" data-terminus="${original}" data-terplus="${added}">${cards}</main>
 <p id="empty" hidden>No glyphs match these filters.</p>
 <noscript><p>Enable JavaScript to use the filters and display controls.</p></noscript>
 <footer>This page contains all bitmap data. It does not need a network connection or other files.
