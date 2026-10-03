@@ -52,8 +52,25 @@ for source in "${sources[@]}"; do
   fi
 done
 
+previous_version=${current_version#FONT_VERSION \"}
+previous_tag=v${previous_version%\"}
+if ! git show-ref --verify --quiet "refs/tags/$previous_tag"; then
+  printf 'Previous release tag %s does not exist.\n' "$previous_tag" >&2
+  exit 1
+fi
+if ! git merge-base --is-ancestor "$previous_tag" HEAD; then
+  printf 'Previous release tag %s is not an ancestor of HEAD.\n' "$previous_tag" >&2
+  exit 1
+fi
+
+tag_message=$(
+  printf 'Terplus %s\n\n' "$version"
+  git log --format='- %s' "$previous_tag..HEAD" -- "${sources[@]}" terplus.uni |
+    sed -E '/^- Release [0-9]+\.[0-9]+\.[0-9]+$/d'
+)
+
 sed -i -E "s/^FONT_VERSION \"[0-9]+\.[0-9]+\.[0-9]+\"$/FONT_VERSION \"$version\"/" "${sources[@]}"
 node build.js
 git add -- "${sources[@]}"
 git commit -m "Release $version"
-git tag -a "v$version"
+git tag -a "v$version" -m "$tag_message"
